@@ -1,6 +1,7 @@
 ﻿using EfimovsCalendar.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,47 +10,54 @@ namespace EfimovsCalendar.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int? year, int? month)
         {
-            var currentDay = DateTime.Now.AddMonths(0);
-            var firstDay = currentDay.AddDays(-currentDay.Day + 1);
-            var dayOfWeek = firstDay.DayOfWeek;
-            int nDay = (int)dayOfWeek;
-            nDay = nDay < 1 ? 6 : nDay-1;
-
-            List<CalendarCell> cells = new List<CalendarCell>();
-
-            for (int i = nDay; i>0; i--)
+            List<CalendarCell> cells;
+            if (year.HasValue && month.HasValue)
             {
-                var tempDay = firstDay.AddDays(-i);
-                CalendarCell temp = new CalendarCell();
-                temp.Date = tempDay;
-                temp.ClassName = "wrongMonth ";
-                cells.Add(temp);
-                
+                cells = getList(new DateTime((int)year, (int)month, 1));
             }
-
-            for (int i = 0; i < 35-nDay; i++)
+            else
             {
-                CalendarCell temp = new CalendarCell();
-                temp.Date = firstDay.AddDays(i);
-                cells.Add(temp);
-                if (temp.Date == DateTime.Now) temp.ClassName = "today ";
-                if (temp.Date.Month != DateTime.Now.Month)
-                    temp.ClassName = "wrongMonth ";
+                cells = getList(DateTime.Now);
             }
-            for (int i=0; i < 8; i++)
-            {
-                CalendarEvent tempEvent = new CalendarEvent();
-                tempEvent.Color = "#ddeeff";
-                tempEvent.Name = $"Событие {i}";
-                cells[4].Events.Add(tempEvent);
-            }
+            ViewBag.CurrentMonth = cells[7].Date.Month;
+            ViewBag.CurrentYear = cells[7].Date.Year;
+            ViewBag.CMonth = cells[7].Date.ToString("MMMM", CultureInfo.CreateSpecificCulture("en"));
             ViewBag.Cells = cells;
             return View();
 
         }
 
+        public List<CalendarCell> getList(DateTime date) {
+            var cells = new List<CalendarCell>();
+
+            if (date.Day != 1) date = date.AddDays(-date.Day + 1);
+            int dayOfWeek = (int) date.DayOfWeek;
+            dayOfWeek = dayOfWeek < 1 ? 6 : dayOfWeek - 1; // Monday is 0 now;
+                       
+            for (int i = -dayOfWeek; i < 35 - dayOfWeek; i++)
+            {
+                var tempDay = date.AddDays(i);
+                CalendarCell temp = new CalendarCell(tempDay,i);
+                cells.Add(temp);
+                
+                if (isSimilarDate(tempDay,DateTime.Now)) temp.ClassName = "today ";
+                if (temp.Date.Month != date.Month)
+                    temp.ClassName = "wrongMonth ";
+            }
+
+            return cells;
+        }
+
+        public bool isSimilarDate(DateTime a, DateTime b)
+        {
+            if (a.Day != b.Day) return false;
+            if (a.Month != b.Month) return false;
+            if (a.Year != b.Year) return false;
+
+            return true;
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

@@ -15,8 +15,9 @@ namespace EfimovsCalendar
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: "{controller}/{action}/{year}/{month}",
+                defaults: new { controller = "Home", action = "Index", year = UrlParameter.Optional,
+                    month = UrlParameter.Optional }
             );
         }
     }

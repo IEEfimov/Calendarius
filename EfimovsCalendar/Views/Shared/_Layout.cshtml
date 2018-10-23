@@ -13,9 +13,13 @@
 </head>
 <body onload="init()" onresize="init()">
     <div id="header">
-        Шапка
-        <button>туды</button>
-        <button>сюды</button>
+        <div class="icon"></div>
+        <div onclick="location.href='/Home/Index/@ViewBag.CurrentYear/@(ViewBag.CurrentMonth-1)'"
+             class="nav-button left"></div>
+        <div onclick="location.href='/Home/Index/@ViewBag.CurrentYear/@(ViewBag.CurrentMonth+1)'"
+             class="nav-button right"></div>
+        <div class="currentDate"> @ViewBag.CMonth @ViewBag.CurrentYear</div>
+
     </div>
     <div id="wrap">
         <div id="sideBar">Sidebar</div>

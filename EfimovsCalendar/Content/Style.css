@@ -5,17 +5,65 @@
 #header {
     width: 100%;
     min-height: 60px;
-    background-color: mediumaquamarine;
+    background-color: white;
+    z-index: 30;
+    border-bottom: solid 1px gray;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: flex-start;
+}
+
+.icon{
+    margin-left: 40px;
+    background-image: url("baseline_calendar_today_black_48dp.png");
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+}
+
+.nav-button {
+    background-size: 40px;
+    width: 40px;
+    height: 40px;
+    
+    border-radius: 40px;
+    box-shadow: 0px 5px 15px grey;
+}
+
+.nav-button:hover {
+    cursor:pointer;
+    background-color: #eeeeee;
+}
+
+.left {
+    margin-left: 200px;
+    margin-right: 20px;
+    background-image: url("baseline_keyboard_arrow_left_black_48dp.png");
+    background-position-x: -2px;
+}
+
+.right {
+    margin-right: 30px;
+    background-image: url("baseline_keyboard_arrow_right_black_48dp.png");
+    background-position-x: 2px;
+}
+
+.currentDate{
+    font-size: 18pt;
 }
 
 #sideBar {
-    width: 20%;
-    background-color: #ddeeff;
+    visibility: hidden;
     max-width: 250px;
+    background-color: #ddeeff;
 }
 
 #calendar {
-    width: 80%;
+    visibility: hidden;
+    min-width: 80%;
     min-height: 100%;
     background-color: white;
     display: flex;
@@ -41,7 +89,7 @@
         }
 
 #calendar .wrongMonth{
-    color: gray;
+    color: red;
 }
 
 .event {
@@ -60,6 +108,12 @@
     border: lightgray 1px solid;
     overflow-y: auto;
 }
+
+    .item:hover {
+        cursor:pointer;
+        z-index: 2;
+        box-shadow: 0px 0px 20px grey;
+    }
 
     .item::-webkit-scrollbar {
         width: 3px;
